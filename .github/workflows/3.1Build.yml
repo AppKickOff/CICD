@@ -1,0 +1,18 @@
+name: Docker Image CI
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --file src\CI\BuildImages\dotnet3.1\Dockerfile --tag dotnet3.1:$(date +%s)
+    - name: Push to repository
+      if: success()
+      run: docker push tomsoliver/builds:dotnet3.1:$(date +%s)
